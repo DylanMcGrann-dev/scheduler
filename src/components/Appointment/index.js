@@ -6,9 +6,9 @@ import Empty from "components/Appointment/Empty";
 
 export default function Appointment(props) {
   const toShowOrNot = function(interview) {
-    return (interview ? <Show interviewer={props.interview.interviewer.name} student={props.interview.student}></Show> : <Empty/>)
+    return (interview ? <Show key={props.interview.interviewer.id} interviewer={props.interview.interviewer.name} student={props.interview.student}></Show> : <Empty/>)
   }
-  // console.log("student",props.interview.interviewer.name);   
+//  console.log("interview:",props.interview)
   return (
     <article className="appointment">
       <Fragment>
