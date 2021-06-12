@@ -49,7 +49,8 @@ const getAppointmentsForDay = function(allState, day) {
 //     {
 //       id: 2,
 //       name: "Tuesday",
-//       appointments: [4, 5]
+//       appointments: [4, 5],
+//       interviewers: [1, 2]
 //     }
 //   ],
 //   appointments: {
@@ -69,6 +70,35 @@ const getAppointmentsForDay = function(allState, day) {
 //   }
 // };
 
+const getInterviewsForDay = function(allState, day) {
+  let interviewsForDay = [];
+  let selectedDay = {};
+  
+  if (allState.days.length < 1) {
+    return [];
+  }
+
+  for (const x of allState.days) {
+    if (x.name === day) {
+      selectedDay = x;
+    }
+  }
+  // console.log(selectedDay);
+  if (selectedDay.interviewers === undefined) {
+    return [];
+  } else {
+    for (const interview of selectedDay.interviewers) {
+      for (const int in allState.interviewers) {
+        if (interview == int) {
+          interviewsForDay.push(allState.interviewers[int]);
+        } 
+      }
+    }
+  }
+
+  return interviewsForDay;
+}
+
 const getInterview = function(state, interview) {
   if (interview === null) {
     return null;
@@ -78,5 +108,5 @@ const getInterview = function(state, interview) {
   const result = {...interview, interviewer}
   return result;
 }
-// console.log(getInterview(state, state.appointments["3"].interview))
-export {getAppointmentsForDay, getInterview}
+// console.log(getInterviewsForDay(state, state.days[1].name))
+export {getAppointmentsForDay, getInterview, getInterviewsForDay}

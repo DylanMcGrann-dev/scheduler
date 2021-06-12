@@ -4,8 +4,8 @@ import DayList from "components/DayList";
 import "components/Application.scss";
 import "components/Appointment";
 import Appointment from "components/Appointment";
-import {getAppointmentsForDay, getInterview} from "helpers/selectors";
-import useVisualMode from "hooks/useVisualMode";
+import {getAppointmentsForDay, getInterview, getInterviewsForDay} from "helpers/selectors";
+// import useVisualMode from "hooks/useVisualMode";
 
 
 export default function Application(props) {
@@ -33,6 +33,7 @@ export default function Application(props) {
     }
     )
   }, [])
+  
   //dailyApps variable is set to the array returned by getAppointmentsForDay function
   const dailyApps = getAppointmentsForDay(state, state.day);
 
@@ -44,6 +45,7 @@ export default function Application(props) {
         id={appointment.id}
         time={appointment.time}
         interview={interview} 
+        interviewers={getInterviewsForDay(state, state.day)}
         />
     )})
   
