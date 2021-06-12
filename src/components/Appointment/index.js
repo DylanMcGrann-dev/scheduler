@@ -5,10 +5,14 @@ import Show from "components/Appointment/Show";
 import Empty from "components/Appointment/Empty";
 
 export default function Appointment(props) {
+  const EMPTY = "EMPTY";
+  const SHOW = "SHOW";
+
+  //if props.interview truthy, render show. if not render Empty 
   const toShowOrNot = function(interview) {
     return (interview ? <Show key={props.interview.interviewer.id} interviewer={props.interview.interviewer.name} student={props.interview.student}></Show> : <Empty/>)
   }
-//  console.log("interview:",props.interview)
+
   return (
     <article className="appointment">
       <Fragment>

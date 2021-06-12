@@ -4,17 +4,22 @@ import DayList from "components/DayList";
 import "components/Application.scss";
 import "components/Appointment";
 import Appointment from "components/Appointment";
-import getAppointmentsForDay from "helpers/selectors";
+import {getAppointmentsForDay, getInterview} from "helpers/selectors";
+import useVisualMode from "hooks/useVisualMode";
+
 
 export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: [],
+    appointments: {},
     interviewers: {}
   })
+  
+  //sets the day state
   const setDay = day => setState({ ...state, day });
   
+  //gets data from an api
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
@@ -22,15 +27,25 @@ export default function Application(props) {
       axios.get("/api/interviewers")
     ])
     .then((all) => {
-      console.log(Object.values(all[2].data));
+      //sets state with data from api
+      // console.log(Object.values(all[1].data));
       setState(prev => ({...prev, days:all[0].data, appointments:Object.values(all[1].data), interviewers:Object.values(all[2].data) }));
     }
     )
   }, [])
-  
+  //dailyApps variable is set to the array returned by getAppointmentsForDay function
   const dailyApps = getAppointmentsForDay(state, state.day);
-  // console.log("dailyApps:",dailyApps);
-  // console.log("state.days:",state.days);
+
+  const allAppointments = dailyApps.map(appointment => {
+    const interview = getInterview(state, appointment.interview);
+    return(
+      <Appointment 
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview} 
+        />
+    )})
   
   return (
     <main className="layout">
@@ -47,10 +62,7 @@ export default function Application(props) {
         <img className="sidebar__lhl sidebar--centered" src="images/lhl.png" alt="Lighthouse Labs"/>
       </section>
       <section className="schedule">
-        {dailyApps.map(appointment => {
-          return(<Appointment key={appointment.id} {...appointment} />)})
-        
-        }
+        {allAppointments}
       </section>
     </main>
   );
