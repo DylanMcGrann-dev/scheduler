@@ -29,11 +29,42 @@ export default function Application(props) {
     .then((all) => {
       //sets state with data from api
       // console.log(Object.values(all[1].data));
-      setState(prev => ({...prev, days:all[0].data, appointments:Object.values(all[1].data), interviewers:Object.values(all[2].data) }));
+      setState(prev => ({...prev, days:all[0].data, appointments:all[1].data, interviewers:all[2].data }));
     }
     )
-  }, [])
+  }, []);
+
+  //updates state with new interview data on selected appointment
+  const bookInterview = (id, interview) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    setState({...state, appointments});
   
+  }
+
+  //deletes interview on selected appointment
+  const deleteInterview = (id) => {
+    //find what appointment is selected and
+    //set interview to null
+    const appointment = { 
+      ...state.appointments[id],
+      interview: null
+    }
+    //update state
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    }
+    setState(prev => ({...prev, appointments}));
+  };
+
   //dailyApps variable is set to the array returned by getAppointmentsForDay function
   const dailyApps = getAppointmentsForDay(state, state.day);
 
@@ -46,6 +77,8 @@ export default function Application(props) {
         time={appointment.time}
         interview={interview} 
         interviewers={getInterviewsForDay(state, state.day)}
+        bookInterview={bookInterview}
+        deleteInterview={deleteInterview}
         />
     )})
   
@@ -65,6 +98,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {allAppointments}
+        {/* <Appointment time={"5pm"} key={'last'} /> */}
       </section>
     </main>
   );

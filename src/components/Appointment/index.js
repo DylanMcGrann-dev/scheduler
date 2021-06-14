@@ -5,33 +5,105 @@ import Show from "components/Appointment/Show";
 import Empty from "components/Appointment/Empty";
 import useVisualMode from "hooks/useVisualMode";
 import Form from "components/Appointment/Form";
-import getInterviewsForDay from "helpers/selectors";
+import Status from "./Status";
+import Confirm from "components/Appointment/Confirm";
 
 export default function Appointment(props) {
+  // console.log(props);
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
+  const SAVING = "SAVING";
+  const DELETING = "DELETING";
+  const CONFIRM = "CONFIRM";
+  const EDIT = "EDIT";
+
+  //function that transitions what is being displayed
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
-
-  //if props.interview truthy, render show. if not render Empty 
-  const toShowOrNot = function (interview) {
-    return (interview ? <Show interviewer={props.interview.interviewer.name} student={props.interview.student}></Show> : <Empty />)
+  
+  const save = (name, interviewer) => {
+    const interview = {
+      student: name,
+      interviewer
+    };
+    transition(SAVING);
+    props.bookInterview(props.id, interview);
+    transition(SHOW);
   }
 
-  const showing =
-    (mode === SHOW && (
+  //transitions to DELETE and calls deleteInterview function
+  const onDelete = () => {
+    transition(CONFIRM);
+  }
+
+  const confirmation = (id) => {
+    transition(DELETING);
+    props.deleteInterview(id);
+    transition(EMPTY);
+  } 
+
+  const confirm = (
+    mode === CONFIRM && (
+      <Confirm onCancel={back} interviewer={props.interview.interviewer} onConfirm={confirmation} />
+    )
+  );
+
+  const muchEmpty = (
+    mode === EMPTY && (
+      <Empty 
+        onAdd={() => transition(CREATE)}
+      /> 
+    )
+  );
+
+  const deleting = (
+    mode === DELETING && (
+      <Status message={"deleting"}/>
+    )
+  )
+
+  const saving = (
+    mode === SAVING && (
+      <Status message={"saving"}/>
+    )
+  )
+
+  const showing = (
+    mode === SHOW && (
       <Show
-        key={props.interview.interviewer.id}
+        // key={props.interview.interviewer.id}
+        // id={props.interview.interviewer.id}
         student={props.interview.student}
-        interviewer={props.interview.interviewer.name}
+        interviewer={props.interview.interviewer}
+        onDelete={onDelete} 
+        onEdit={transition(EDIT)}
       />
-    ))
+    )
+  );
 
-  const muchEmpty = (mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />)
+  const editing = (
+    mode === EDIT && (
+      <Form
+        interviewers={props.interviewers}
+        onCancel={() => back(EMPTY)}
+        bookInterview={props.bookInterview}
+        onSave={save}
+      /> 
+    )
+  );
 
-  const creation = (mode === CREATE && <Form interviewers={props.interviewers} onCancel={() => back(EMPTY)}/>)
+  const creation = (
+    mode === CREATE && (
+      <Form
+        interviewers={props.interviewers}
+        onCancel={() => back(EMPTY)}
+        bookInterview={props.bookInterview}
+        onSave={save}
+      /> 
+    )
+  );
 
   return (
     <article className="appointment">
@@ -40,6 +112,8 @@ export default function Appointment(props) {
         {muchEmpty}
         {showing}
         {creation}
+        {saving}
+        {confirm}
       </Fragment>
     </article>
 
