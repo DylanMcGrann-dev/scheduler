@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import axios from "axios";
 import "components/Appointment/styles.scss";
 import Header from "components/Appointment/Header";
 import Show from "components/Appointment/Show";
@@ -18,7 +19,8 @@ export default function Appointment(props) {
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
-  const ERROR = "ERROR";
+  const ERROR_SAVE = "ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
 
   //function that transitions what is being displayed
   const { mode, transition, back } = useVisualMode(
@@ -27,21 +29,22 @@ export default function Appointment(props) {
 
   const save = (name, interviewer) => {
     const interview = {
-      student: name,
+      student: name,  
       interviewer
     };
     transition(SAVING);
-    const promise = new Promise((resolve, reject) => {
-      resolve(props.bookInterview(props.id, interview))
-      .reject(error => console.log("couldn't reach server:",error));
-    })
-    promise.then(result => {
+    props.bookInterview(props.id, interview);
+
+    axios.put(`/api/appointments/${props.id}`, {interview: interview})
+    .then(response => {
       transition(SHOW);
-    })
-    .catch(error => {
-      transition(ERROR);
-      console.log("something went wrong with saving:", error);
-    })
+        console.log("status:", response.status);
+        console.log("data:", response.data);
+      })
+      .catch(error => {
+        transition(ERROR_SAVE, true);
+        console.log("something went wrong:", error);
+      });
   }
 
   //transitions to DELETE and calls deleteInterview function
@@ -51,8 +54,17 @@ export default function Appointment(props) {
 
   const confirmation = (id) => {
     transition(DELETING);
-    props.deleteInterview(id);
-    transition(EMPTY);
+    axios.delete(`/api/appointments/${id}`)
+    .then(response => {
+      props.deleteInterview(id)
+      console.log("status:", response.status);
+      console.log("data:", response.data);
+      transition(EMPTY);
+    })
+    .catch(error => {
+      transition(ERROR_DELETE, true);
+      console.log("something went wrong:", error);
+    });
   }
 
   const editInterview = (name, interviewer) => {
@@ -68,9 +80,15 @@ export default function Appointment(props) {
     )
   );
 
-  const error = (
-    mode === ERROR && (
-      <Error />
+  const error_delete = (
+    mode === ERROR_DELETE && (
+      <Error onClose={back} message={"something went wrong with deleting"}/>
+    )
+  )
+
+  const error_save = (
+    mode === ERROR_SAVE && (
+      <Error onClose={back} message={"something went wrong with saving"} />
     )
   )
 
@@ -94,7 +112,6 @@ export default function Appointment(props) {
     )
   )
 
-  console.log("props.interview:", props.interview);
   const showing = (
     mode === SHOW && (
       <Show
@@ -136,8 +153,11 @@ export default function Appointment(props) {
         <Header time={props.time} />
         {muchEmpty}
         {showing}
+        {deleting}
         {creation}
         {saving}
+        {error_delete}
+        {error_save}
         {confirm}
         {editing}
       </Fragment>
