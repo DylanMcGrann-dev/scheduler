@@ -27,15 +27,17 @@ export default function Form(props) {
   const interviewHandler = function(event) {
     setInterviewer(event);
   };
+
   const reset = function() {
     setName("");
     setInterviewer(null);
   };
+
   const cancel = function() {
     reset();
     props.onCancel()
   }
-
+  console.log("props.interviewer:",props.interviewer);
 
   return (
     <main className="appointment__card appointment__card--create">
@@ -48,9 +50,6 @@ export default function Form(props) {
             placeholder="Enter Student Name"
             value={name}
             onChange={nameHandler}
-          /*
-            This must be a controlled component
-          */
           />
         </form>
         <InterviewerList interviewers={props.interviewers} interviewer={interviewer} setInterviewer={interviewHandler} />

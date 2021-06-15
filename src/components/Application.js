@@ -44,8 +44,18 @@ export default function Application(props) {
     const appointments = {
       ...state.appointments,
       [id]: appointment
-    };
+    };  
     setState({...state, appointments});
+
+ 
+    axios.put(`/api/appointments/${id}`, {interview: interview})
+    .then(response => {
+        console.log("status:", response.status);
+        console.log("data:", response.data);
+      })
+      .catch(error => {
+        console.log("something went wrong:", error);
+      });
   
   }
 
@@ -62,7 +72,17 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     }
-    setState(prev => ({...prev, appointments}));
+    console.log("id:", id);
+    axios.delete(`/api/appointments/${id}`)
+    .then(response => {
+      console.log("status:", response.status);
+      console.log("data:", response.data);
+      // setState({...state, appointments});
+      setState(prev => ({...prev, appointments}));
+    })
+    .catch(error => {
+      console.log("something went wrong:", error);
+    });
   };
 
   //dailyApps variable is set to the array returned by getAppointmentsForDay function
