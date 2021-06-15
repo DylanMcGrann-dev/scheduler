@@ -11,6 +11,7 @@ import useApplicationData from "hooks/useApplicationData";
 
 export default function Application(props) {
   const {
+    updateSpots,
     state,
     setDay,
     bookInterview,
@@ -32,6 +33,7 @@ export default function Application(props) {
         interviewers={getInterviewsForDay(state, state.day)}
         bookInterview={bookInterview}
         deleteInterview={deleteInterview}
+        updateSpots={updateSpots}
         />
     )})
   

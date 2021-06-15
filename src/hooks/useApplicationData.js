@@ -27,7 +27,7 @@ export default function () {
   //sets the day state
   const setDay = day => setState({ ...state, day });
   //update spots count based on how any interviews are null in the appointments array of the day
-  const updateSpots = () => {
+  const updateSpots = (delta) => {
     let wantedDay = {};
     let spotCount = 0;
     for (const selectedDay of state.days) {
@@ -36,13 +36,20 @@ export default function () {
         console.log("wantedDay:",wantedDay);
       }
     }
-    for (const app of wantedDay.appointments) {
-      // console.log("app:",app);
-      if (state.appointments[app].interview === null) {
-        spotCount++;
-      }
-    }
+    wantedDay.spots += delta;
+    const days = [...state.days, wantedDay];
+    setState(prev => ({...prev, days}));
+
+
+    // for (const app of wantedDay.appointments) {
+    //   // console.log("app:", app);
+    //   console.log("app:",state.appointments[app].interview);
+    //   if (!state.appointments[app].interview) {
+    //     spotCount++;
+    //   }
+    // }
     console.log("spotCount:",spotCount);
+    console.log("should be 2nd");
   }
 
   const bookInterview = (id, interview) => {
@@ -58,7 +65,7 @@ export default function () {
     };
 
     setState(prev => ({ ...prev, appointments }));
-    updateSpots();
+    console.log("should be 1st");
   }
 
   const deleteInterview = (id) => {
@@ -75,5 +82,5 @@ export default function () {
     }
     setState(prev => ({ ...prev, appointments }));
   };
-  return { setDay, bookInterview, deleteInterview, state}
+  return { setDay, bookInterview, deleteInterview, state, updateSpots }
 }

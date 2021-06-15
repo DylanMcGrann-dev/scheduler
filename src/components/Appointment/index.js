@@ -40,6 +40,7 @@ export default function Appointment(props) {
       transition(SHOW);
         console.log("status:", response.status);
         console.log("data:", response.data);
+        props.updateSpots(-1);
       })
       .catch(error => {
         transition(ERROR_SAVE, true);
@@ -56,7 +57,8 @@ export default function Appointment(props) {
     transition(DELETING);
     axios.delete(`/api/appointments/${id}`)
     .then(response => {
-      props.deleteInterview(id)
+      props.deleteInterview(id);
+      props.updateSpots(1);
       console.log("status:", response.status);
       console.log("data:", response.data);
       transition(EMPTY);
