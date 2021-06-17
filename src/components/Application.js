@@ -1,12 +1,11 @@
 import React from "react";
-// import axios from "axios";
 import DayList from "components/DayList";
 import "components/Application.scss";
 import "components/Appointment";
 import Appointment from "components/Appointment";
 import {getAppointmentsForDay, getInterview, getInterviewsForDay} from "helpers/selectors";
 import useApplicationData from "hooks/useApplicationData";
-// import useVisualMode from "hooks/useVisualMode";
+
 
 
 export default function Application(props) {
@@ -17,10 +16,11 @@ export default function Application(props) {
     bookInterview,
     deleteInterview
   } = useApplicationData();
- 
+
 
   //dailyApps variable is set to the array returned by getAppointmentsForDay function
   const dailyApps = getAppointmentsForDay(state, state.day);
+
 
   const allAppointments = dailyApps.map(appointment => {
     const interview = getInterview(state, appointment.interview);
@@ -35,7 +35,7 @@ export default function Application(props) {
         deleteInterview={deleteInterview}
         updateSpots={updateSpots}
         />
-    )})
+    )});
   
   return (
     <main className="layout">
@@ -53,7 +53,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {allAppointments}
-        {/* <Appointment time={"5pm"} key={'last'} /> */}
+
       </section>
     </main>
   );

@@ -28,32 +28,33 @@ export default function () {
   const setDay = day => setState({ ...state, day });
   //update spots count based on how any interviews are null in the appointments array of the day
   const updateSpots = (delta) => {
-    let wantedDay = {};
-    let spotCount = 0;
-    for (const selectedDay of state.days) {
-      if (selectedDay.name === state.day){
-        wantedDay = selectedDay;
-        console.log("wantedDay:",wantedDay);
-      }
+
+    const dayIndex = state.days.findIndex((day) => day.name === state.day);
+    // if day.appointment already exists then don't update spots
+    const day = {
+      ...state.days[dayIndex],
+      spots: state.days[dayIndex].spots + delta
     }
-    wantedDay.spots += delta;
-    const days = [...state.days, wantedDay];
-    setState(prev => ({...prev, days}));
+    const days = [...state.days]
+    days.splice(dayIndex, 1, day);
+    return days;
 
-
-    // for (const app of wantedDay.appointments) {
-    //   // console.log("app:", app);
-    //   console.log("app:",state.appointments[app].interview);
-    //   if (!state.appointments[app].interview) {
-    //     spotCount++;
-    //   }
-    // }
-    console.log("spotCount:",spotCount);
-    console.log("should be 2nd");
   }
 
   const bookInterview = (id, interview) => {
+    if (!state.appointments[id].interview) {
+      const appointment = {
+        ...state.appointments[id],
+        interview: { ...interview }
+      };
 
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment
+      };
+      const days = updateSpots(-1);
+      setState(prev => ({ ...prev, appointments, days }));
+    } 
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -63,9 +64,7 @@ export default function () {
       ...state.appointments,
       [id]: appointment
     };
-
     setState(prev => ({ ...prev, appointments }));
-    console.log("should be 1st");
   }
 
   const deleteInterview = (id) => {
@@ -80,7 +79,8 @@ export default function () {
       ...state.appointments,
       [id]: appointment
     }
-    setState(prev => ({ ...prev, appointments }));
+    const days = updateSpots(1);
+    setState(prev => ({ ...prev, appointments, days }));
   };
   return { setDay, bookInterview, deleteInterview, state, updateSpots }
 }

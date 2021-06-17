@@ -38,13 +38,12 @@ export default function Appointment(props) {
     axios.put(`/api/appointments/${props.id}`, {interview: interview})
     .then(response => {
       transition(SHOW);
-        console.log("status:", response.status);
-        console.log("data:", response.data);
-        props.updateSpots(-1);
+        // console.log("status:", response.status);
+        // console.log("data:", response.data);
       })
       .catch(error => {
         transition(ERROR_SAVE, true);
-        console.log("something went wrong:", error);
+        // console.log("something went wrong:", error);
       });
   }
 
@@ -58,22 +57,18 @@ export default function Appointment(props) {
     axios.delete(`/api/appointments/${id}`)
     .then(response => {
       props.deleteInterview(id);
-      props.updateSpots(1);
-      console.log("status:", response.status);
-      console.log("data:", response.data);
+      // console.log("status:", response.status);
+      // console.log("data:", response.data);
       transition(EMPTY);
     })
     .catch(error => {
       transition(ERROR_DELETE, true);
-      console.log("something went wrong:", error);
+      // console.log("something went wrong:", error);
     });
   }
 
   const editInterview = (name, interviewer) => {
-
-    // console.log("props.student:",props.student);
     transition(EDIT);
-
   }
 
   const confirm = (
@@ -150,7 +145,7 @@ export default function Appointment(props) {
   );
 
   return (
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Fragment>
         <Header time={props.time} />
         {muchEmpty}
