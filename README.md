@@ -23,3 +23,7 @@ npm test
 ```sh
 npm run storybook
 ```
+## Screen Shots 
+!["confirm deletion"](https://github.com/DylanMcGrann-dev/scheduler/blob/master/docs/confirm_delete.png)
+!["Creation of an interview"](https://github.com/DylanMcGrann-dev/scheduler/blob/master/docs/creating_appointment.png)
+!["list of appointments"](https://github.com/DylanMcGrann-dev/scheduler/blob/master/docs/list_of_appointments.png)
