@@ -1,5 +1,7 @@
 import React from "react";
 import "components/Appointment/styles.scss";
+
+// displays the time of the appointment
 export default function Header(props) {
   return (
     <header className="appointment__time">

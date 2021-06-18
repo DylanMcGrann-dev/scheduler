@@ -1,10 +1,7 @@
 import React from "react";
 import "components/Appointment/styles.scss";
 
-// ---PROPS
-// message:String eg. "Could not delete appointment."
-// onClose:Function to be called when the user clicks the Close button
-
+// error window displayed when an error occurs during a save or a delete of an appointment
 export default function Error(props) {
 
   return (

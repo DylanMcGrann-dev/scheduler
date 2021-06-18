@@ -2,11 +2,8 @@ import React from "react";
 import "components/Appointment/styles.scss";
 import Button from "components/Button";
 
-// message:String eg. "Delete the appointment?"
-// onConfirm:Function to be called when the user clicks the Confirm button
-// onCancel:Function to be called when the user clicks the Cancel button
-
-
+// confirm widow is prompted when a user clicks the delete button,
+// so the user can verify they want to delete the interview
 export default function Confirm(props) {
 
   return (

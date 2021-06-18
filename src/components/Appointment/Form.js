@@ -2,7 +2,6 @@ import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 import React, { useState } from "react";
 import "components/Appointment/styles.scss";
-// import { action } from "@storybook/addon-actions/dist/preview";
 
 //---PROPS
 // name:String
@@ -15,16 +14,19 @@ import "components/Appointment/styles.scss";
 // onSave:Function
 // onCancel:Function
 
+// the form is where the user creates a interview to be booked.
 export default function Form(props) {
 
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [error, setError] = useState("");
 
+  // sets the name as the value typed in the input
   const nameHandler = function (event) {
     setName(event.target.value)
   };
   
+  //sets the interviewer upon a click event 
   const interviewHandler = function(event) {
     setInterviewer(event);
   };
@@ -34,11 +36,13 @@ export default function Form(props) {
     setInterviewer(null);
   };
 
+  // when the user clicks on cancel the form is reset to empty 
   const cancel = function() {
     reset();
     props.onCancel()
   }
 
+  // ensures the user has filled all required input, if not an error message will be displayed
   function validate(name, interviewer) {
     if (name === "") {
       setError("Student name cannot be blank");

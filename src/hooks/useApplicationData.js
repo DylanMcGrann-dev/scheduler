@@ -18,7 +18,6 @@ export default function () {
     ])
       .then((all) => {
         //sets state with data from api
-        // console.log(Object.values(all[1].data));
         setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
       }
       )
@@ -40,7 +39,7 @@ export default function () {
     return days;
 
   }
-
+  //updates sate with given id and interview 
   const bookInterview = (id, interview) => {
     if (!state.appointments[id].interview) {
       const appointment = {
@@ -67,14 +66,12 @@ export default function () {
     setState(prev => ({ ...prev, appointments }));
   }
 
+  //removes interview data from state and database
   const deleteInterview = (id) => {
-    //find what appointment is selected and
-    //set interview to null
     const appointment = {
       ...state.appointments[id],
       interview: null
     }
-    //update state
     const appointments = {
       ...state.appointments,
       [id]: appointment

@@ -11,7 +11,6 @@ import Confirm from "components/Appointment/Confirm";
 import Error from "components/Appointment/Error";
 
 export default function Appointment(props) {
-  // console.log(props);
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -27,6 +26,7 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
+  // updates database and state with new interview data 
   const save = (name, interviewer) => {
     const interview = {
       student: name,  
@@ -38,12 +38,9 @@ export default function Appointment(props) {
     axios.put(`/api/appointments/${props.id}`, {interview: interview})
     .then(response => {
       transition(SHOW);
-        // console.log("status:", response.status);
-        // console.log("data:", response.data);
       })
       .catch(error => {
         transition(ERROR_SAVE, true);
-        // console.log("something went wrong:", error);
       });
   }
 
@@ -52,18 +49,17 @@ export default function Appointment(props) {
     transition(CONFIRM);
   }
 
+  //when a users confirms the deletion of a interview this 
+  //function is called and removes the interview data from the database and state
   const confirmation = (id) => {
     transition(DELETING);
     axios.delete(`/api/appointments/${id}`)
     .then(response => {
       props.deleteInterview(id);
-      // console.log("status:", response.status);
-      // console.log("data:", response.data);
       transition(EMPTY);
     })
     .catch(error => {
       transition(ERROR_DELETE, true);
-      // console.log("something went wrong:", error);
     });
   }
 

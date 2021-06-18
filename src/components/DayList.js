@@ -10,7 +10,6 @@ export default function DayList(props) {
     selected={day.name === props.day}
     setDay={props.setDay}  />))
     :null;
- 
 
   return (
   <ul>{listOfDays}</ul>);

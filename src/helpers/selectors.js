@@ -1,3 +1,4 @@
+// gets all appointments for the selected day
 const getAppointmentsForDay = function(allState, day) {
   let appointmentsForDay = [];
   let selectedDay = {};
@@ -27,7 +28,7 @@ const getAppointmentsForDay = function(allState, day) {
   return appointmentsForDay;
 }
 
-
+//gets all interviews for the selected day
 const getInterviewsForDay = function(allState, day) {
   let interviewsForDay = [];
   let selectedDay = {};
@@ -56,14 +57,12 @@ const getInterviewsForDay = function(allState, day) {
 
   return interviewsForDay;
 }
-
+//retrieves interview info for the appointment slot 
 const getInterview = function(state, interview) {
   if (interview === null) {
     return null;
   } 
   const id = interview.interviewer;
-  // console.log("interview:",interview);
-  // console.log("state:",state);
   const interviewer = state.interviewers[id];
   const result = {...interview, interviewer}
   return result;
