@@ -81,7 +81,7 @@ export default function Appointment(props) {
 
   const error_save = (
     mode === ERROR_SAVE && (
-      <Error onClose={back} message={"something went wrong with saving"} />
+      <Error onClose={() => transition(CREATE)} message={"something went wrong with saving"} />
     )
   )
 
