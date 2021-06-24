@@ -35,6 +35,7 @@ export default function Application(props) {
         deleteInterview={deleteInterview}
         updateSpots={updateSpots}
         />
+        
     )});
   
   return (
@@ -53,7 +54,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {allAppointments}
-
+        <Appointment key="last" time="5pm" />
       </section>
     </main>
   );
